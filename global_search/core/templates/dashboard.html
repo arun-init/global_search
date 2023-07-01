@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Dashboard</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      position: relative;
+    }
+    .container {
+      text-align: center;
+      margin-top: 150px;
+    }
+    .search-bar {
+      display: inline-block;
+      width: 500px;
+      height: 40px;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 3px;
+      font-size: 16px;
+      outline: none;
+    }
+    .search-button {
+      display: inline-block;
+      width: 80px;
+      height: 40px;
+      margin-left: 10px;
+      background-color: #4285F4;
+      color: #fff;
+      border: none;
+      border-radius: 3px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    .logout-button {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      background-color: #db4437;
+      color: #fff;
+      border: none;
+      border-radius: 3px;
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    #suggestions {
+      list-style-type: none;
+      padding: 0;
+      margin-top: 10px;
+      width: 500px;
+      margin-left: auto;
+      margin-right: auto;
+      text-align: left;
+      background-color: #fff;
+      border: 1px solid #ccc;
+      border-radius: 3px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    }
+    #suggestions li {
+      padding: 10px;
+      cursor: pointer;
+    }
+    #suggestions li:hover {
+      background-color: #f5f5f5;
+    }
+    #results {
+      display: none;
+    }
+    #results-list {
+      list-style-type: none;
+      padding: 0;
+    }
+  </style>
+</head>
+<body>
+  <button id="logout-button" class="logout-button">Logout</button>
+  <div class="container">
+    <h1>Global Search</h1>
+    <form id="search-form">
+      <input type="text" id="search-bar" class="search-bar" placeholder="Search...">
+      <input type="submit" value="Search" class="search-button">
+    </form>
+    <ul id="suggestions"></ul>
+    <div id="results">
+      <h2>Search Results</h2>
+      <ul id="results-list"></ul>
+    </div>
+  </div>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script>
+    $(document).ready(function() {
+      $('#logout-button').click(function() {
+        // Get the CSRF token value from the cookie
+        var csrfToken = getCookie('csrftoken');
+
+        // Send the CSRF token in the headers
+        $.ajax({
+          type: 'POST',
+          url: '/logout/',
+          headers: {
+            'X-CSRFToken': csrfToken
+          },
+          success: function(response) {
+            console.log(response);
+            window.location.href = '/login/';
+          },
+          error: function(xhr, textStatus, errorThrown) {
+            console.log(xhr.responseText);
+          }
+        });
+      });
+
+      $('#search-form').submit(function(event) {
+        event.preventDefault();
+        var query = $('#search-bar').val();
+        $.ajax({
+          url: '/api/v1/search/',
+          data: { query: query },
+          success: function(response) {
+            var data = response.data;
+            var cities = data.cities;
+            var countries = data.countries;
+            var languages = data.languages;
+            var resultListItems = countries.concat(cities, languages);
+            console.log('api/v1/search/ call');
+            console.log(resultListItems);
+            // Filter out undefined elements
+            resultListItems = resultListItems.filter(function(result) {
+              console.log(result.Language);
+              return result.Language || result.Name || result;
+            });
+
+            console.log('After filtering result');
+            console.log(resultListItems);
+
+            if (resultListItems.length === 0) {
+              $('#results-list').html('<li class="no-results">No results found.</li>');
+              $('#suggestions').empty();
+              $('#results').show();
+              return;
+            }
+
+            var finalListItems = resultListItems.map(function(result) {
+              return '<li class="point">' + result.Name + ' - ' + result.Code + '</li>';
+            });
+
+
+            $('#suggestions').empty();
+            $('#results').show();
+
+            var encodedResults = encodeURIComponent(JSON.stringify(resultListItems));
+            // Redirect to the results page with the encoded results in the URL
+            window.location.href = '/results/?results=' + encodedResults;
+          }
+        });
+      });
+
+      $('#search-bar').on('input', function() {
+        var query = $(this).val();
+        $.ajax({
+          url: '/api/v1/autosuggest/',
+          data: { query: query },
+          success: function(response) {
+            var data = response.data;
+            var suggestions = data.cities.map(function(city) {
+              return "City: " + city.Name;
+            }).concat(data.countries.map(function(country) {
+              return "Country: " + country.Name;
+            })).concat(data.languages.map(function(language) {
+              return "Language: " + language.Language;
+            }));
+            var suggestionListItems = suggestions.map(function(suggestion) {
+              return '<li>' + suggestion + '</li>';
+            });
+            $('#suggestions').html(suggestionListItems.join(''));
+          }
+        });
+      });
+
+      $('#suggestions').on('click', 'li', function() {
+        var selectedSuggestion = $(this).text();
+        var selectedSuggestion = selectedSuggestion.substring(selectedSuggestion.indexOf(':') + 2);
+        $('#search-bar').val(selectedSuggestion);
+        $('#suggestions').empty();
+      });
+
+      // Function to retrieve the value of a cookie by name
+      function getCookie(name) {
+        var cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+          var cookies = document.cookie.split(';');
+          for (var i = 0; i < cookies.length; i++) {
+            var cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+              cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+              break;
+            }
+          }
+        }
+        return cookieValue;
+      }
+    });
+  </script>
+</body>
+</html>

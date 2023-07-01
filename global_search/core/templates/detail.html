@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Details</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+    }
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    .detail-card {
+      border: 1px solid #ccc;
+      padding: 10px;
+      margin-bottom: 10px;
+    }
+    .detail-field {
+      margin-bottom: 5px;
+    }
+    .detail-field-label {
+      font-weight: bold;
+    }
+    .detail-field-value {
+      margin-left: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Details</h1>
+    <div id="result-card"></div>
+  </div>
+
+  <script>
+    // Retrieve the query from the URL
+    const query = getQueryStringValue('q');
+    console.log(query);
+
+    function getQueryStringValue(key) {
+      const urlParams = new URLSearchParams(window.location.search);
+      return urlParams.get(key);
+    }
+
+    const apiUrl = 'http://localhost:8000/api/v1/details/'; // Replace with the actual API URL
+
+    fetch(apiUrl + '?query=' + query)
+      .then(response => response.json())
+      .then(responseData => {
+        const data = responseData.data;
+
+        // Process the retrieved data and update the HTML
+        const resultCard = document.getElementById('result-card');
+        resultCard.innerHTML = '';
+
+        // Check if data is an array
+        if (Array.isArray(data)) {
+          // Create detail cards for each item in the response
+          data.forEach(item => {
+            const detailCard = document.createElement('div');
+            detailCard.classList.add('detail-card');
+
+            // Iterate over the fields of the item
+            Object.keys(item).forEach(key => {
+              const field = document.createElement('div');
+              field.classList.add('detail-field');
+
+              const label = document.createElement('span');
+              label.classList.add('detail-field-label');
+              label.textContent = key + ':';
+
+              const value = document.createElement('span');
+              value.classList.add('detail-field-value');
+              value.textContent = item[key];
+
+              field.appendChild(label);
+              field.appendChild(value);
+
+              detailCard.appendChild(field);
+            });
+
+            resultCard.appendChild(detailCard);
+          });
+        } else {
+          // Handle the case when data is not an array (e.g., single object response)
+          const detailCard = document.createElement('div');
+          detailCard.classList.add('detail-card');
+
+          Object.keys(data).forEach(key => {
+            const field = document.createElement('div');
+            field.classList.add('detail-field');
+
+            const label = document.createElement('span');
+            label.classList.add('detail-field-label');
+            label.textContent = key + ':';
+
+            const value = document.createElement('span');
+            value.classList.add('detail-field-value');
+            value.textContent = data[key];
+
+            field.appendChild(label);
+            field.appendChild(value);
+
+            detailCard.appendChild(field);
+          });
+
+          resultCard.appendChild(detailCard);
+        }
+      })
+      .catch(error => console.error(error));
+  </script>
+</body>
+</html>

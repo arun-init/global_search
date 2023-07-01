@@ -1,0 +1,113 @@
+{% block content %}
+  <style>
+    /* CSS styles */
+    .form-container {
+      margin-bottom: 20px;
+    }
+
+    .form-label {
+      display: block;
+      margin-bottom: 5px;
+      color: #333;
+      font-weight: bold;
+    }
+
+    .form-input {
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      width: 200px;
+    }
+
+    .form-select {
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      width: 210px;
+    }
+
+    .form-submit {
+      padding: 8px 16px;
+      background-color: #4CAF50;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .response-message {
+      margin-top: 10px;
+      color: #ff0000;
+      font-weight: bold;
+    }
+  </style>
+
+  <h1>Signup</h1>
+  <div class="form-container">
+    <form id="signup-form">
+      {% csrf_token %}
+      <label class="form-label" for="first_name">*First Name:</label>
+      <input class="form-input" type="text" id="first_name" name="first_name"><br>
+      <label class="form-label" for="last_name">Last Name:</label>
+      <input class="form-input" type="text" id="last_name" name="last_name"><br>
+      <label class="form-label" for="email">*Email:</label>
+      <input class="form-input" type="email" id="email" name="email"><br>
+      <label class="form-label" for="phone">*Phone:</label>
+      <input class="form-input" type="text" id="phone" name="phone"><br>
+      <label class="form-label" for="gender">*Gender:</label>
+      <select class="form-select" id="gender" name="gender">
+        <option value="male">Male</option>
+        <option value="female">Female</option>
+      </select><br>
+      <input class="form-submit" type="submit" value="Signup">
+      <input onclick="redirectToLogin()" class="form-submit" type="submit" value="Login">
+    </form>
+  </div>
+
+  <div id="response-message" class="response-message"></div>
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script>
+    function redirectToLogin() {
+      window.location.href = "/login/";
+    }
+    $(document).ready(function() {
+      $('#signup-form').submit(function(event) {
+        event.preventDefault();
+        var form = $(this);
+        var url = '/api/v1/signup/';
+        var data = form.serialize();
+
+        $.ajax({
+          type: 'POST',
+          url: url,
+          data: data,
+          success: function(response) {
+            if (response.success) {
+              $('#response-message').text(response.data.message);
+              setTimeout(function() {
+                window.location.href = '/login/';
+              }, 3000);
+            } else {
+              $('#response-message').text('Error occurred. Please try again.');
+            }
+          },
+          error: function(xhr, textStatus, errorThrown) {
+            if (xhr.responseJSON) {
+              var errorMessages = xhr.responseJSON;
+              var errorText = '';
+
+              for (var key in errorMessages) {
+                errorText += key + ':' + errorMessages[key][0] + '<br>';
+              }
+
+              $('#response-message').html(errorText);
+            } else {
+              $('#response-message').text('Error occurred. Please try again.');
+            }
+          }
+        });
+      });
+    });
+  </script>
+{% endblock %}

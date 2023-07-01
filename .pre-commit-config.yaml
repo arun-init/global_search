@@ -1,0 +1,36 @@
+# See https://pre-commit.com for more information
+# See https://pre-commit.com/hooks.html for more hooks
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.1.0
+    hooks:
+      - id: check-case-conflict
+      - id: check-executables-have-shebangs
+      - id: check-merge-conflict
+      - id: check-symlinks
+      - id: trailing-whitespace
+        exclude: ".*json$|.*txt$|.*csv|.*md"
+      - id: no-commit-to-branch
+        args: ['--branch', 'main']
+      - id: check-ast
+      - id: end-of-file-fixer
+        exclude_types: [svg]
+      - id: check-added-large-files
+      - id: debug-statements
+
+  - repo: local
+    hooks:
+      # Configuration for black exists in pyproject.toml,
+      # but we let pre-commit take care of the file filtering.
+      - id: black
+        name: black
+        entry: black
+        language: system
+        types: [python]
+      # Configuration for isort exists in pyproject.toml,
+      # but we let pre-commit take care of the file filtering.
+      - id: isort
+        name: isort
+        entry: isort
+        language: system
+        types: [python]
