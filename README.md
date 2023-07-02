@@ -105,4 +105,12 @@ To use the Global Search Application:
 
 2. Visit the sign-up page by navigating to http://localhost:8000/signup/.
 
+<img src="https://github.com/arun-init/global_search/assets/82087106/016f97fb-b476-473f-b5f4-0b6cf60e477c" alt="drawing" style="width:200px;"/>
+<img src="https://github.com/arun-init/global_search/assets/82087106/3945533a-65d6-488d-a5ab-8bfd8dbfe95d" alt="drawing" style="width:200px;"/>
+<img src="https://github.com/arun-init/global_search/assets/82087106/60323940-17a7-448e-9e5e-2976c25329ba" alt="drawing" style="width:200px;"/>
+<img src="https://github.com/arun-init/global_search/assets/82087106/24411992-93fb-4802-92d2-749be54614c2" alt="drawing" style="width:200px;"/>
+<img src="https://github.com/arun-init/global_search/assets/82087106/608e1d30-0510-4398-8684-e6a23d89acfc" alt="drawing" style="width:200px;"/>
+<img src="https://github.com/arun-init/global_search/assets/82087106/8207baee-867c-4cff-a83f-0e8f30e7d97d" alt="drawing" style="width:200px;"/>
+<img src="https://github.com/arun-init/global_search/assets/82087106/8ff71c29-ecfc-4df3-a900-696b3d793222" alt="drawing" style="width:200px;"/>
+
 On the sign-up page, users can create an account to access the Global Search Application. Once signed up and logged in, users can use the search bar on the dashboard to perform global searches. The application provides autocomplete suggestions as users type in the search bar, making the search process more
