@@ -9,7 +9,7 @@ Before setting up and running the Global Search Application, make sure you have 
 1. **Python 3.8+**: Install Python by running the following commands in your terminal:
    ```bash
    sudo apt update
-   sudo apt install python3
+   sudo apt-get install python3 python3-pip
    python --version
    ```
 
