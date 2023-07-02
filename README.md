@@ -24,12 +24,19 @@ Before setting up and running the Global Search Application, make sure you have 
    ```bash
    sudo apt update
    sudo apt-get install python3 python3-pip
+   ```
+   If installed then check :
+   ```bash
    python --version
    ```
 
-2. **Virtualenv**: Create a virtual environment to isolate the application's dependencies. Install Virtualenv using the following command:
+3. **Virtualenv**: Create a virtual environment to isolate the application's dependencies. Install Virtualenv using the following command:
    ```bash
    sudo pip3 install virtualenv
+   ```
+   If Installed then check :
+   ```bash
+   virtualenv --version
    ```
    Then, create a virtual environment and activate it:
    ```bash
@@ -38,13 +45,16 @@ Before setting up and running the Global Search Application, make sure you have 
    ```
    To deactivate the virtual environment, simply run `deactivate`.
 
-3. **Poetry**: Poetry is a dependency management tool that we'll use to install and manage project dependencies. Install Poetry by running the following commands:
+5. **Poetry**: Poetry is a dependency management tool that we'll use to install and manage project dependencies. Install Poetry by running the following commands:
    ```bash
    curl -sSL https://install.python-poetry.org | python3 -
+   ```
+   If installed then check :
+   ```
    poetry --version
    ```
 
-4. **MySQL 15+**: The application requires a MySQL database to store and retrieve data. You can install MySQL by following the appropriate instructions for your operating system.
+7. **MySQL 15+**: The application requires a MySQL database to store and retrieve data. You can install MySQL by following the appropriate instructions for your operating system.
    ```bash
    https://dev.mysql.com/doc/mysql-installation-excerpt/8.0/en/installing.html 
    ```
