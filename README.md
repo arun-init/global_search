@@ -2,7 +2,7 @@
 
 The Global Search Application is a Django-based web application that enables users to perform global searches across various data, including cities, countries, and languages. The application's core functionality includes a search bar with autosuggestions and a dashboard to display search results.
 
-## Backend Assignment (Panorbit Services LLP) :
+## Backend Assignment :
 
 ## Repository Setup
 1. **Clone** the `global_search` repo in your local machine.
