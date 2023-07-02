@@ -24,15 +24,18 @@ Before setting up and running the Global Search Application, make sure you have 
    ```
    To deactivate the virtual environment, simply run `deactivate`.
 
-3. **Poetry**: Poetry is a dependency management tool that we'll use to install and manage the project dependencies. Install Poetry by running the following commands:
+3. **Poetry**: Poetry is a dependency management tool that we'll use to install and manage project dependencies. Install Poetry by running the following commands:
    ```bash
    curl -sSL https://install.python-poetry.org | python3 -
    poetry --version
    ```
 
-4. **MySQL 15+**: The application requires a MySQL database to store and retrieve data. Install MySQL by following the appropriate instructions for your operating system.
+4. **MySQL 15+**: The application requires a MySQL database to store and retrieve data. You can install MySQL by following the appropriate instructions for your operating system.
+   ```bash
+   https://dev.mysql.com/doc/mysql-installation-excerpt/8.0/en/installing.html 
+   ```
 
-## Installation Instructions
+## Installation/Setup Instructions
 
 Follow these steps to install and set up the Global Search Application:
 
@@ -41,7 +44,7 @@ Follow these steps to install and set up the Global Search Application:
    poetry install
    ```
 
-2. **MySQL Setup**: Create a new database and user for the application to use. Launch the MySQL shell by running the following command and entering your MySQL root password when prompted:
+2. **MySQL Setup**: Create a new database and user for the application. Launch the MySQL shell by running the following command and entering your MySQL root password when prompted:
    ```bash
    mysql -u root -p
    ```
@@ -53,7 +56,7 @@ Follow these steps to install and set up the Global Search Application:
    ```
    Replace `'your_username'` and `'your_password'` with your desired values.
 
-3. **Environment Configuration**: Copy the `.env.example` file to `.env.development` and add the necessary database configuration, such as `DB_NAME`, in the `.env.development` file.
+3. **Environment Configuration**: Copy the `.env.example` file to `.env.development` and add the necessary database configuration, such as `DB_NAME`, `DB_HOST`, `DB_USER`, `DB_PASSWORD`, `DB_PORT` in the `.env.development` file.
 
 4. **Database Migration**: Run the following commands in the given order to perform database migration and populate the database with initial data. Please ensure you execute them in the specified order to avoid errors during the application run:
    ```bash
